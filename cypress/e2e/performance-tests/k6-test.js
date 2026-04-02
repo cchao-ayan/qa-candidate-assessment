@@ -21,9 +21,9 @@ export default function () {
     },
   };
 
-  const res = http.post(url, payload, params);
+  const response = http.post(url, payload, params);
 
-  check(res, {
+  check(response, {
     'status is 201': (r) => r.status === 201,
   });
 
