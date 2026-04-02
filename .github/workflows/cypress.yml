@@ -28,10 +28,13 @@ jobs:
       - name: Run Cypress tests
         run: npm run cy:run
 
-      # - name: Run k6
-      #   uses: grafana/k6-action@v0.3.0
-      #   with:
-      #     filename: cypress/performance-tests/k6-test.js
+      - name: Install k6
+        run: sudo apt-get update && sudo apt-get install -y gnupg ca-certificates && \
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 33E614A32AA3A4A2 && \
+            echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list && \
+            sudo apt-get update && sudo apt-get install -y k6
+      - name: Run k6 performance tests
+        run: npm run k6:run
 
       - name: Run Postman API tests
         run: npm run postman:run
