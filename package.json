@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.22.5"
+  },
+  "devDependencies": {
+    "cypress": "^15.13.0",
+    "prettier": "^3.8.1"
+  }
+}
