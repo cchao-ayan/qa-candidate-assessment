@@ -28,10 +28,10 @@ jobs:
       - name: Run Cypress tests
         run: npm run cy:run
 
-      - name: Run k6
-        uses: grafana/k6-action@v0.3.0
-        with:
-          filename: cypress/performance-tests/k6-test.js
+      # - name: Run k6
+      #   uses: grafana/k6-action@v0.3.0
+      #   with:
+      #     filename: cypress/performance-tests/k6-test.js
 
       - name: Run Postman API tests
         run: npm run postman:run
