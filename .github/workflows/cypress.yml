@@ -28,13 +28,12 @@ jobs:
       - name: Run Cypress tests
         run: npm run cy:run
 
+      - name: Run Postman API tests
+        run: npm run postman:run
+
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
         
       - name: Run local k6 test
-        uses: grafana/run-k6-action@v1
-        with:
-          path: cypress/performance-tests/k6-test.js
+        run: npm run k6:run
 
-      - name: Run Postman API tests
-        run: npm run postman:run
