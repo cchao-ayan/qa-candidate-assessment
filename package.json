@@ -10,7 +10,7 @@
   "scripts": {
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "k6:run": "k6 run cypress/e2e/performance-tests/k6/tests.js --out json=results.json",
+    "k6:run": "k6 run cypress/e2e/performance-tests/k6/tests.js",
     "postman:run": "npx newman run cypress/e2e/api-tests/postman_collection.json -e cypress/e2e/api-tests/env.json"
   }
 }
