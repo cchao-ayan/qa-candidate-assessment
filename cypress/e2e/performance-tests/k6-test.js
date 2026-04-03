@@ -1,26 +1,33 @@
-import http from 'k6/http';
+import http, { get } from 'k6/http';
 import { check, sleep } from 'k6';
 
 export const options = {
   vus: 1,          // virtual users
-  duration: '10s',  // test duration
+  //duration: '10s',  // test duration
+  iterations: 1        // number of iterations per virtual user
 };
 
-export function login() {
+function randomEmail() {
+  return `user_${Date.now()}_${Math.floor(Math.random() * 10000)}@example.com`;
+}
+
+export function getAccessToken() {
   const response = http.post('https://simple-grocery-store-api.click/api-clients', JSON.stringify({
-    "username": "test_user",
-    "password": "test_password"
+    "clientName": "Christian",
+    "clientEmail": randomEmail()
   }), {
     headers: {
       "Content-Type": "application/json"
     },
   });
+  //console.log('getAccessToken response: ', response.body);
   return response.json().accessToken;
 }
 
-export function getProducts() {
+export function getProductID() {
   const response = http.get('https://simple-grocery-store-api.click/products');
-  return response.json().products[0].id;
+  //console.log('product IDs:', response.json()[0].id);
+  return response.json()[0].id;
 }
 
 export function createCart() {
@@ -29,13 +36,16 @@ export function createCart() {
       "Content-Type": "application/json"
     },
   });
+  //console.log('Cart ID:', response.json().cartId);
   return response.json().cartId;
 }
 
-export function addItemToCart() {
-  const cartId = createCart();
+export function addItemToCart(cartId) {
+  const productId = getProductID();
+  console.log('productID type:', typeof productId);
+  console.log(`https://simple-grocery-store-api.click/carts/${cartId}/items`);
   const response = http.post(`https://simple-grocery-store-api.click/carts/${cartId}/items`, JSON.stringify({
-    "productId": getProducts()
+    "productId": productId
   }), {
     headers: {
       "Content-Type": "application/json"
@@ -45,24 +55,27 @@ export function addItemToCart() {
 }
 
 export function createOrder() {
-  const accessToken = login();
+  // create token
+  const accessToken = getAccessToken();
+  console.log('Access Token:', accessToken);
+  //create cart ID
   const cartId = createCart();
-  addItemToCart();
-  const url = 'https://simple-grocery-store-api.click/orders';
+  console.log('Cart ID:', cartId);
+  //add to cart using the product ID selected
+  const itemId = addItemToCart(cartId);
+  console.log('Item ID:', itemId);
 
-  const payload = JSON.stringify({
+  const response = http.post(`https://simple-grocery-store-api.click/orders`, JSON.stringify({
     "cartId": cartId,
-    "customerName": "Ella Nikolaus"
-  });
-
-  const params = {
+    "customerName": "Christian",
+  }), {
     headers: {
       "Authorization": `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     },
-  };
+  });
 
-  const response = http.post(url, payload, params);
+  console.log('create order response: ', response.body);
 
   check(response, {
     'status is 201': (r) => r.status === 201,
