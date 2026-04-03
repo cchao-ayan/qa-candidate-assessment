@@ -1,3 +1,5 @@
+import http, { get } from 'k6/http';
+import { check } from 'k6';
 
 function randomEmail() {
   return `user_${Date.now()}_${Math.floor(Math.random() * 10000)}@example.com`;
