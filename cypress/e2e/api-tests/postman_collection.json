@@ -79,12 +79,17 @@
         {
           "listen": "test",
           "script": {
-            "type": "text/javascript",
             "exec": [
               "const response=pm.response.json();",
               "",
               "pm.test(\"Status code is 201\", function () {",
               "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains access token\", function () {",
+              "    pm.expect(response).to.have.property('accessToken');",
+              "    pm.expect(response.accessToken).to.not.be.empty;",
+              "    pm.expect(response.accessToken).to.be.a('string');",
               "});",
               "",
               "const accessToken = response.accessToken;",
@@ -96,7 +101,10 @@
               "//console.log(client);",
               "pm.collectionVariables.set('clientName', client.clientName);",
               "pm.collectionVariables.set('clientEmail', client.clientEmail);"
-            ]
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -139,6 +147,18 @@
               "pm.test(\"Status code is 201\", function () {\r",
               "    pm.response.to.have.status(201);\r",
               "});\r",
+              "pm.test(\"Response is an Object\", function () {\r",
+              "    pm.expect(response).to.be.an('Object');\r",
+              "});\r",
+              "pm.test(\"Cart created successfully\", function () {\r",
+              "    pm.expect(response.created).to.be.true;\r",
+              "});\r",
+              "pm.test(\"Cart ID is not empty\", function () {\r",
+              "    pm.expect(response.cartId).to.not.be.empty;\r",
+              "});\r",
+              "pm.test(\"Cart ID is a string\", function () {\r",
+              "    pm.expect(response.cartId).to.be.a('string');\r",
+              "});\r",
               "\r",
               "const cartId = response.cartId;\r",
               "pm.collectionVariables.set(\"cartId\", cartId);\r",
@@ -178,11 +198,18 @@
               "    pm.response.to.have.status(201);\r",
               "});\r",
               "\r",
-              "pm.test('Basic test',() => {\r",
-              "    pm.expect(response).to.be.a('Object')\r",
-              "    pm.expect(response.created).to.be.true\r",
-              "    pm.expect(response.itemId).to.be.a('Number')\r",
-              "})\r",
+              "pm.test(\"Response is an Object\", function () {\r",
+              "    pm.expect(response).to.be.an('Object');\r",
+              "});\r",
+              "pm.test(\"Item added successfully\", function () {\r",
+              "    pm.expect(response.created).to.be.true;\r",
+              "});\r",
+              "pm.test(\"Item ID is not null\", function () {\r",
+              "    pm.expect(response.itemId).to.not.be.null;\r",
+              "});\r",
+              "pm.test(\"Item ID is a number\", function () {\r",
+              "    pm.expect(response.itemId).to.be.a('number');\r",
+              "});\r",
               "\r",
               "const itemId=response.itemId;\r",
               "pm.collectionVariables.set('itemId',itemId)"
@@ -251,9 +278,24 @@
               "pm.test(\"Status code is 201\", function () {",
               "    pm.response.to.have.status(201);",
               "});",
+              "pm.test(\"Response is an Object\", function () {",
+              "    pm.expect(response).to.be.an('Object');",
+              "});",
+              "pm.test(\"Order created successfully\", function () {",
+              "    pm.expect(response.created).to.be.true;",
+              "});",
+              "pm.test(\"Order ID is not empty\", function () {",
+              "    pm.expect(response.orderId).to.not.be.empty;",
+              "});",
+              "pm.test(\"Order ID is a string\", function () {",
+              "    pm.expect(response.orderId).to.be.a('string');",
+              "});",
               "",
               "const orderId = response.orderId;",
               "pm.collectionVariables.set(\"orderId\", orderId);",
+              "",
+              "const customer = JSON.parse(pm.request.body.raw);",
+              "pm.collectionVariables.set('customerName', customer.customerName);",
               ""
             ],
             "type": "text/javascript",
@@ -348,6 +390,10 @@
     },
     {
       "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "customerName",
       "value": ""
     }
   ]

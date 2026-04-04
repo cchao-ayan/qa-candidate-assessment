@@ -1,33 +1,33 @@
+import { addTheFirstItemToCartWithSortOption, clickCartLink, clickBurgerMenuButton, clickLogoutLink } from '../../actions/inventory.actions';
+import { loginSuccessfully } from '../../actions/login.actions';
+import { clickCheckoutButton } from '../../actions/cart.actions';
+import { fillInCheckoutInformationAndContinue } from '../../actions/checkout-step-one.actions';
+import { clickFinishButton } from '../../actions/checkout-step-two.actions';
+import { clickBackToProductsButton } from '../../actions/checkout-complete.actions';
+
 describe('Order Groceries', () => {
   beforeEach('Visits Source Demo website and logs in', () => {
     cy.visit('/');
-    cy.get('[data-test="username"]').type('standard_user');
-    cy.get('[data-test="password"]').type('secret_sauce');
-    cy.get('[data-test="login-button"]').click();
+    loginSuccessfully();
   });
   it('should complete a grocery order end-to-end', () => {
     // Add items to cart
-    cy.get('[data-test="product-sort-container"]').select('Price (low to high)');
-    cy.get('[data-test="inventory-item"]').first().within(() => {
-      cy.get('[data-test="add-to-cart-sauce-labs-onesie"]').click();
-    });
-    cy.get('[data-test="product-sort-container"]').select('Price (high to low)');
-    cy.get('[data-test="inventory-item"]').first().within(() => {
-      cy.get('[data-test="add-to-cart-sauce-labs-fleece-jacket"]').click();
-    });
-    cy.get('[data-test="shopping-cart-link"]').click();
-    cy.get('[data-test="checkout"]').click();
+    addTheFirstItemToCartWithSortOption('Price (low to high)');
+    addTheFirstItemToCartWithSortOption('Price (high to low)');
+    clickCartLink();
 
-    // Fill in checkout information
-    cy.get('[data-test="firstName"]').type('test_first_name');
-    cy.get('[data-test="lastName"]').type('test_lastname');
-    cy.get('[data-test="postalCode"]').type('test_postal_code');
-    cy.get('[data-test="continue"]').click();
+    clickCheckoutButton();
+
+    // Fill in checkout information and continue
+    fillInCheckoutInformationAndContinue();
 
     // Finish order and logout
-    cy.get('[data-test="finish"]').click();
-    cy.get('[data-test="back-to-products"]').click();
-    cy.get('#react-burger-menu-btn').click();
-    cy.get('[data-test="logout-sidebar-link"]').click();
+    clickFinishButton();
+
+    clickBackToProductsButton();
+    
+    clickBurgerMenuButton();
+
+    clickLogoutLink();
   });
 })
