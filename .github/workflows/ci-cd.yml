@@ -1,6 +1,8 @@
 name: Cypress Tests, Postman API Tests, and K6 Performance Tests
 
 on:
+  workflow_dispatch:
+  
   push:
     branches:
       - main
