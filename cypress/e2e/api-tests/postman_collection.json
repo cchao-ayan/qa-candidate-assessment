@@ -1,1 +1,427 @@
-{"error":{"name":"instanceNotFoundError","message":"We could not find the collection you are looking for"}}
+{
+  "info": {
+    "_postman_id": "5bd916e8-c6bf-4a05-bfee-60ec91c67642",
+    "name": "Simple Grocery Store API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "10898324",
+    "_collection_link": "https://go.postman.co/collection/10898324-5bd916e8-c6bf-4a05-bfee-60ec91c67642?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "API status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "assertStatusIs(200);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Product List",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "assertStatusIs(200);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register a Client",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// VARIABLES //",
+              "const response = pm.response.json();",
+              "const client = JSON.parse(pm.request.body.raw);",
+              "",
+              "// ASSERTIONS //",
+              "assertStatusIs(201);",
+              "assertResponseContains(response, ",
+              "                        { ",
+              "                            property: 'accessToken', ",
+              "                            type: 'string', ",
+              "                            notEmpty: true",
+              "                        });",
+              "",
+              "// SETTERS //",
+              "pm.environment.set(\"accessToken\", response.accessToken);",
+              "pm.collectionVariables.set(\"accessToken\", response.accessToken);",
+              "pm.collectionVariables.set('clientName', client.clientName);",
+              "pm.collectionVariables.set('clientEmail', client.clientEmail);",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"clientName\": \"{{$randomUserName}}\",\r\n   \"clientEmail\": \"{{$randomEmail}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api-clients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api-clients"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Cart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// VARIABLES //\r",
+              "const response = pm.response.json();\r",
+              "const cartId = response.cartId;\r",
+              "\r",
+              "// ASSERTIONS //\r",
+              "assertStatusIs(201);\r",
+              "assertResponseContains(response, \r",
+              "                        { \r",
+              "                            property: 'created', \r",
+              "                            type: 'boolean', \r",
+              "                            expectedValue: true \r",
+              "                        });\r",
+              "\r",
+              "assertResponseContains(response, \r",
+              "                        { \r",
+              "                            property: 'cartId', \r",
+              "                            type: 'string',\r",
+              "                            notEmpty: true\r",
+              "                        });\r",
+              "\r",
+              "\r",
+              "// SETTERS //\r",
+              "pm.collectionVariables.set(\"cartId\", cartId);\r",
+              "pm.environment.set(\"cartId\", cartId);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/carts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "carts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add to Cart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// VARIABLES //\r",
+              "const response=pm.response.json();\r",
+              "const itemId=response.itemId;\r",
+              "\r",
+              "// ASSERTIONS //\r",
+              "assertStatusIs(201);\r",
+              "assertResponseContains(response, \r",
+              "                        { \r",
+              "                            property: 'created', \r",
+              "                            type: 'boolean', \r",
+              "                            expectedValue: true \r",
+              "                        });\r",
+              "assertResponseContains(response, \r",
+              "                        { \r",
+              "                            property: 'itemId', \r",
+              "                            type: 'number', \r",
+              "                            notNull: true\r",
+              "                        });\r",
+              "\r",
+              "// SETTERS //\r",
+              "pm.collectionVariables.set('itemId',itemId)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"productId\": 1225\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/carts/:cartId/items",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "carts",
+            ":cartId",
+            "items"
+          ],
+          "variable": [
+            {
+              "key": "cartId",
+              "value": "{{cartId}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// VARIABLES //",
+              "const response = pm.response.json();",
+              "const orderId = response.orderId;",
+              "const customer = JSON.parse(pm.request.body.raw);",
+              "",
+              "// ASSERTIONS //",
+              "assertStatusIs(201);",
+              "assertResponseContains(response, ",
+              "                        { ",
+              "                            property: 'created', ",
+              "                            type: 'boolean', ",
+              "                            expectedValue: true",
+              "                        });",
+              "assertResponseContains(response, ",
+              "                        { ",
+              "                            property: 'orderId', ",
+              "                            type: 'string', ",
+              "                            notEmpty: true",
+              "                        });                        ",
+              "",
+              "// SETTERS //",
+              "pm.collectionVariables.set(\"orderId\", orderId);",
+              "pm.collectionVariables.set('customerName', customer.customerName);",
+              "",
+              "// CLEANUP - ENVIRONMENT AND COLLECTION VARIABLES //",
+              "const keep = [\"baseUrl\"];",
+              "",
+              "Object.keys(pm.environment.toObject()).forEach(keys => {",
+              "    if(!keep.includes(keys)) {",
+              "        pm.environment.unset(keys);",
+              "    }",
+              "});",
+              "",
+              "Object.keys(pm.collectionVariables.toObject()).forEach(keys => {",
+              "    if(!keep.includes(keys)) {",
+              "        pm.collectionVariables.unset(keys);",
+              "    }",
+              "});",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"cartId\": \"{{cartId}}\",\r\n    \"customerName\": \"{{$randomFullName}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/orders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "assertStatusIs = (status) => {\r",
+          "    pm.test(`Status is ${status}`, () => {\r",
+          "        pm.response.to.have.status(status);\r",
+          "    });\r",
+          "};\r",
+          "\r",
+          "assertResponseContains = (response, options) => {\r",
+          "    const { property, type, notNull, notEmpty, expectedValue } = options;\r",
+          "\r",
+          "    const actual = response[property];\r",
+          "\r",
+          "    // Type check\r",
+          "    if (type !== undefined) {\r",
+          "        pm.test(`Property ${property} is of type ${type}`, () => {\r",
+          "            pm.expect(typeof actual).to.eql(type);\r",
+          "        });\r",
+          "    }\r",
+          "\r",
+          "    // Not null\r",
+          "    if (notNull) {\r",
+          "        pm.test(`Property ${property} is not null`, () => {\r",
+          "            pm.expect(actual).to.not.be.null;\r",
+          "        });\r",
+          "    }\r",
+          "\r",
+          "    // Not empty (strings)\r",
+          "    if (notEmpty && typeof actual === \"string\") {\r",
+          "        pm.test(`Property ${property} is not empty`, () => {\r",
+          "            pm.expect(actual).to.not.be.empty;\r",
+          "        });\r",
+          "    }\r",
+          "\r",
+          "    // Exact value\r",
+          "    if (expectedValue !== undefined) {\r",
+          "        pm.test(`Property ${property} equals ${expectedValue}`, () => {\r",
+          "            pm.expect(actual).to.eql(expectedValue);\r",
+          "        });\r",
+          "    }\r",
+          "}\r",
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    }
+  ]
+}

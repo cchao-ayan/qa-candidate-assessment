@@ -1,9 +1,14 @@
-import { addTheFirstItemToCartWithSortOption, clickCartLink, clickBurgerMenuButton, clickLogoutLink } from '../../actions/inventory.actions';
-import { loginSuccessfully } from '../../actions/login.actions';
-import { clickCheckoutButton } from '../../actions/cart.actions';
-import { fillInCheckoutInformationAndContinue } from '../../actions/checkout-step-one.actions';
-import { clickFinishButton } from '../../actions/checkout-step-two.actions';
-import { clickBackToProductsButton } from '../../actions/checkout-complete.actions';
+import {
+  loginSuccessfully,
+  addTheFirstItemToCartWithSortOption,
+  clickCartLink,
+  clickCheckoutButton,
+  fillInCheckoutInformationAndContinue,
+  clickFinishButton,
+  clickBackToProductsButton,
+  clickBurgerMenuButton,
+  clickLogoutLink
+} from "../../actions";
 
 describe('Order Groceries', () => {
   beforeEach('Visits Source Demo website and logs in', () => {
@@ -25,7 +30,7 @@ describe('Order Groceries', () => {
     clickFinishButton();
 
     clickBackToProductsButton();
-    
+
     clickBurgerMenuButton();
 
     clickLogoutLink();
