@@ -1,5 +1,6 @@
 import { sleep } from 'k6';
 import { createOrder } from './scripts.js';
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/3.0.4/dist/bundle.js'
 
 export const options = {
     //vus: 1,          // virtual users
@@ -20,4 +21,10 @@ export const options = {
 export default function () {
     createOrder();
     sleep(1);
+}
+
+export function handleSummary(data) {
+  return {
+    'k6-summary.html': htmlReport(data),
+  }
 }
