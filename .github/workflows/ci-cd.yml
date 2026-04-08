@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+  permissions:
+  contents: write
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -17,28 +20,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # # Sync Postman Collection (only on main push)
-      # - name: Sync Postman Collection
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: |
-      #     mkdir -p cypress/e2e/api-tests
-      #     curl -X GET "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}" \
-      #     -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
-      #     -o cypress/e2e/api-tests/postman_collection.json
+      # Sync Postman Collection (only on main push)
+      - name: Sync Postman Collection
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p cypress/e2e/api-tests
+          curl -X GET "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}" \
+          -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+          -o cypress/e2e/api-tests/postman_collection.json
 
-      # # Commit only if changes exist (prevents failure + loop control)
-      # - name: Commit updated Postman collection
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: |
-      #     git config user.name "github-actions"
-      #     git config user.email "actions@github.com"
-      #     if [[ -n "$(git status --porcelain cypress/e2e/api-tests/postman_collection.json)" ]]; then
-      #       git add cypress/e2e/api-tests/postman_collection.json
-      #       git commit -m "chore: auto-sync Postman collection"
-      #       git push
-      #     else
-      #       echo "No changes in Postman collection"
-      #     fi
+      # Commit only if changes exist (prevents failure + loop control)
+      - name: Commit updated Postman collection
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          if [[ -n "$(git status --porcelain cypress/e2e/api-tests/postman_collection.json)" ]]; then
+            git add cypress/e2e/api-tests/postman_collection.json
+            git commit -m "chore: auto-sync Postman collection"
+            git push
+          else
+            echo "No changes in Postman collection"
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
