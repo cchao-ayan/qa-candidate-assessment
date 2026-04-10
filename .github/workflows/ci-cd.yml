@@ -64,4 +64,16 @@ jobs:
         
       - name: Run k6 test
         run: npm run k6:run
+      
+      - name: Upload k6 results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: cypress/e2e/performance-tests/k6/k6-summary.csv
+      
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-html-report
+          path: cypress/e2e/performance-tests/k6/k6-summary.html
 
