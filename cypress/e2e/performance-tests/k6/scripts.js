@@ -47,9 +47,9 @@ export function createCart() {
 }
 
 export function addItemToCart(cartId) {
-  const productId = getProductID();
+  ///const productId = getProductID();
   const response = http.post(`${baseUrl}/carts/${cartId}/items`, JSON.stringify({
-    "productId": productId
+    "productId": 1225
   }), {
     headers: {
       "Content-Type": "application/json"
