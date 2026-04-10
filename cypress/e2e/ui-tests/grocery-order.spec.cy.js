@@ -15,7 +15,7 @@ describe('Order Groceries', () => {
     cy.visit('/');
     loginSuccessfully();
   });
-  it('should complete a grocery order end-to-end', () => {
+  it('should complete a grocery order and logout', () => {
     // Add items to cart
     addTheFirstItemToCartWithSortOption('Price (low to high)');
     addTheFirstItemToCartWithSortOption('Price (high to low)');
@@ -28,11 +28,8 @@ describe('Order Groceries', () => {
 
     // Finish order and logout
     clickFinishButton();
-
     clickBackToProductsButton();
-
     clickBurgerMenuButton();
-
     clickLogoutLink();
   });
 })

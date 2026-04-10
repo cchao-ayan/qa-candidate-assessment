@@ -15,6 +15,13 @@ export function getAccessToken() {
     headers: {
       "Content-Type": "application/json"
     },
+  },
+    {
+      tags: { name: 'Create API client' }
+    });
+
+  check(response, {
+    'Create API client status is 201': (r) => r.status === 201,
   });
   return response.json().accessToken;
 }
@@ -29,6 +36,12 @@ export function createCart() {
     headers: {
       "Content-Type": "application/json"
     },
+  },
+    {
+      tags: { name: 'Create cart' }
+    });
+  check(response, {
+    'Create cart status is 201': (r) => r.status === 201,
   });
   return response.json().cartId;
 }
@@ -41,6 +54,12 @@ export function addItemToCart(cartId) {
     headers: {
       "Content-Type": "application/json"
     },
+  },
+    {
+      tags: { name: 'Add item to cart' }
+    });
+  check(response, {
+    'Add item to cart status is 201': (r) => r.status === 201,
   });
   return response.json().itemId;
 }
@@ -61,9 +80,12 @@ export function createOrder() {
       "Authorization": `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     },
-  });
+  },
+    {
+      tags: { name: 'Create order' }
+    });
 
   check(response, {
-    'status is 201': (r) => r.status === 201,
+    'Create order status is 201': (r) => r.status === 201,
   });
 }
