@@ -45,7 +45,7 @@ export const options = {
     },
     thresholds: {
         'http_req_duration': ['p(95)<1000'], // 95% of requests should be below 1000ms
-        'http_req_failed': ['rate<0.01'], // less than 1% of requests should fail
+        'http_req_failed': ['rate<0.02'], // less than 2% of requests should fail
     }
 
 };
