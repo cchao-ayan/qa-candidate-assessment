@@ -36,10 +36,8 @@ export function createCart() {
     headers: {
       "Content-Type": "application/json"
     },
-  },
-    {
-      tags: { name: 'Create cart' }
-    });
+    tags: { name: 'Create cart' }
+  });
   check(response, {
     'Create cart status is 201': (r) => r.status === 201,
   });

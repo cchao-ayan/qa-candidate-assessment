@@ -1,6 +1,7 @@
 import { sleep } from 'k6';
 import { createOrder } from './scripts.js';
-import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/3.0.4/dist/bundle.js'
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/3.0.4/dist/bundle.js';
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js';
 
 export const options = {
     scenarios: {
@@ -21,7 +22,7 @@ export const options = {
                 { duration: '20s', target: 20 },
                 { duration: '10s', target: 0 }
             ]
-         },
+        },
         // 'create-order-arrival-rate': {
         //     executor: 'constant-arrival-rate',
         //     rate: 5,
@@ -58,5 +59,7 @@ export default function () {
 export function handleSummary(data) {
     return {
         'cypress/e2e/performance-tests/k6/k6-summary.html': htmlReport(data),
+        'stdout': textSummary(data, { indent: ' ', enableColors: true }),
+        'cypress/e2e/performance-tests/k6/summary.json': JSON.stringify(data),
     }
 }
