@@ -62,18 +62,33 @@ jobs:
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
         
-      - name: Run k6 test
+      - name: Run k6 test - workflow
         run: npm run k6:run-workflow
       
       - name: Upload k6 results artifact
         uses: actions/upload-artifact@v4
         with:
           name: k6-results
-          path: cypress/e2e/performance-tests/k6/reports/k6-summary.csv
+          path: cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.csv
       
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
           name: k6-html-report
-          path: cypress/e2e/performance-tests/k6/reports/k6-summary.html
+          path: cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html
+
+      - name: Run k6 test - endpoints
+        run: npm run k6:run-endpoint
+      
+      - name: Upload k6 results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: cypress/e2e/performance-tests/k6/reports/k6-endpoint-summary.csv
+      
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-html-report
+          path: cypress/e2e/performance-tests/k6/reports/k6-endpoint-summary.html
 

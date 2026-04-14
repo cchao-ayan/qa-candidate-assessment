@@ -7,6 +7,5 @@ export { options, handleSummary }
 
 export default function () {
     createOrderFlow();
-    sleep(1);
 }
 

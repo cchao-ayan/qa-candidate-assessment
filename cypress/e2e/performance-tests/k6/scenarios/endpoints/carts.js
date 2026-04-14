@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check } from 'k6';
+import { check, sleep } from 'k6';
 
 const baseUrl = 'https://simple-grocery-store-api.click';
 
@@ -19,6 +19,7 @@ export function createCart() {
     check(response, {
         'Create cart status is 201': (r) => r.status === 201,
     });
+    sleep(1);
     return response.json().cartId;
 }
 
@@ -38,5 +39,6 @@ export function addItemToCart(cartId, productIdCallback) {
     check(response, {
         'Add item to cart status is 201': (r) => r.status === 201,
     });
+    sleep(1);
     return response.json().itemId;
 }

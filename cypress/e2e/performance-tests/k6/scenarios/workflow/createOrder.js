@@ -1,3 +1,4 @@
+import { sleep } from 'k6';
 import { getProductID } from "../endpoints/products.js";
 import { createAPIClient } from "../endpoints/api-clients.js";
 import { createCart, addItemToCart } from "../endpoints/carts.js";
@@ -18,4 +19,5 @@ export function createOrderFlow() {
 
     addItemToCart(cartId, getProductID);
     createOrder(cartId, accessToken);
+    sleep(1);
 }
