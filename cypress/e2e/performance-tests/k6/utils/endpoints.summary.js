@@ -3,8 +3,8 @@ import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 export function handleSummary(data) {
     return {
-        'cypress/e2e/performance-tests/k6/reports/k6-endpoint-summary.html': htmlReport(data),
+        'cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html': htmlReport(data),
         'stdout': textSummary(data, { indent: ' ', enableColors: true }),
-        'cypress/e2e/performance-tests/k6/reports/k6-endpoint-summary.json': JSON.stringify(data),
+        'cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.json': JSON.stringify(data),
     }
 }
