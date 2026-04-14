@@ -72,11 +72,11 @@ jobs:
           path: cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html
 
       - name: Run k6 test - endpoints
-        run: npm run k6:run-endpoint
+        run: npm run k6:run-endpoints
           
       - name: Upload HTML endpoint report
         uses: actions/upload-artifact@v4
         with:
           name: k6-html-report
-          path: cypress/e2e/performance-tests/k6/reports/k6-endpoint-summary.html
+          path: cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html
 
