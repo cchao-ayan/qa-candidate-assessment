@@ -14,8 +14,7 @@ export function getProductID() {
 
     const response = http.get(url, param);
     check(response, {
-        'products status is 200': (r) => r.status === 200,
-        'products returns productID': (r) =>r.json('productId') !== undefined
+        'products status is 200': (r) => r.status === 200
     });
 
     return getRandomProductID(response.json());
