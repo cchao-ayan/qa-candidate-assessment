@@ -36,6 +36,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Install reporters (important)
+      - name: Install reporters
+        run: |
+          npm install -D newman-reporter-htmlextra mochawesome mochawesome-merge mochawesome-report-generator
+
       # Sync Postman Collection (only on main push)
       - name: Sync Postman Collection
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -60,11 +65,13 @@ jobs:
             echo "No changes in Postman collection"
           fi
 
-      # Cypress (non-blocking but visible failure)
+      # Run Cypress with Mochawesome reporter (non-blocking but visible failure)
       - name: Run Cypress tests
         id: cypress
         continue-on-error: true
-        run: npm run cy:run
+        run: |
+          npx cypress run \
+            --cypress-mochawesome-reporter
 
        # Postman (non-blocking but visible failure)
       - name: Run Postman API tests
