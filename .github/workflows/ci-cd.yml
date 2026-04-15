@@ -60,53 +60,53 @@ jobs:
             echo "No changes in Postman collection"
           fi
 
-      # 🔹 Cypress (non-blocking but visible failure)
+      # Cypress (non-blocking but visible failure)
       - name: Run Cypress tests
         id: cypress
         continue-on-error: true
         run: npm run cy:run
 
-       # 🔹 Postman (non-blocking but visible failure)
+       # Postman (non-blocking but visible failure)
       - name: Run Postman API tests
         id: postman
         continue-on-error: true
         run: npm run postman:run
 
-      # 🔹 Setup k6
+      # Setup k6
       - name: Setup k6
         uses: grafana/setup-k6-action@v1
 
-      # 🔹 k6 Workflow
+      # k6 Workflow
       - name: Run k6 test - workflow
         id: k6_workflow
         continue-on-error: true
         run: VERSION=${VERSION} npm run k6:run-workflow
 
-      # 🔹 k6 Endpoints
+      # k6 Endpoints
       - name: Run k6 test - endpoints
         id: k6_endpoints
         continue-on-error: true
         run: VERSION=${VERSION} npm run k6:run-endpoints
 
-      # 🔹 Organize reports
+      # Organize reports
       - name: Rename reports
         run: |
-          mkdir -p reports/${VERSION}
+          mkdir -p cypress/e2e/performance-tests/k6/reports/${VERSION}
 
           mv cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html \
-             reports/${VERSION}/k6-workflow-${VERSION}.html || true
+             cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-workflow-${VERSION}.html || true
 
           mv cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html \
-             reports/${VERSION}/k6-endpoints-${VERSION}.html || true
+             cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-endpoints-${VERSION}.html || true
 
-      # 🔹 Upload reports
+      # Upload reports
       - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
           name: qa-reports-${{ env.VERSION }}
-          path: reports/${{ env.VERSION }}
+          path: cypress/e2e/performance-tests/k6/reports/${{ env.VERSION }}
 
-      # 🔥 Final Quality Gate (optional but powerful)
+      # Final check to determine overall workflow status
       - name: Final Status Check
         if: always()
         run: |
