@@ -8,7 +8,7 @@ import {
   clickBackToProductsButton,
   clickBurgerMenuButton,
   clickLogoutLink
-} from './actions';
+} from '../actions';
 
 describe('Order Groceries', () => {
   beforeEach('Visits Source Demo website and logs in', () => {

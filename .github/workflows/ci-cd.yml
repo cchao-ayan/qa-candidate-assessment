@@ -1,4 +1,4 @@
-name: Cypress Tests, Postman API Tests, and K6 Performance Tests
+name: QA Pipeline (Cypress + Postman + k6)
 
 on:
   workflow_dispatch:
@@ -15,12 +15,26 @@ permissions:
   contents: write
 
 jobs:
-  cypress-run:
+  QA_Pipeline:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+    
+      - name: Set version
+        run: |
+          SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          VERSION=${GITHUB_REF_NAME}-${{ github.run_number }}-$SHORT_SHA
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+
+      - name: Install dependencies
+        run: npm ci
 
       # Sync Postman Collection (only on main push)
       - name: Sync Postman Collection
@@ -37,6 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+
           if [[ -n "$(git status --porcelain cypress/e2e/api-tests/postman_collection.json)" ]]; then
             git add cypress/e2e/api-tests/postman_collection.json
             git commit -m "chore: auto-sync Postman collection"
@@ -45,38 +60,68 @@ jobs:
             echo "No changes in Postman collection"
           fi
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.18.0'
-
-      - name: Install dependencies
-        run: npm ci
-
+      # 🔹 Cypress (non-blocking but visible failure)
       - name: Run Cypress tests
+        id: cypress
+        continue-on-error: true
         run: npm run cy:run
 
+       # 🔹 Postman (non-blocking but visible failure)
       - name: Run Postman API tests
+        id: postman
+        continue-on-error: true
         run: npm run postman:run
 
-      - name: Setup K6
+      # 🔹 Setup k6
+      - name: Setup k6
         uses: grafana/setup-k6-action@v1
-        
-      - name: Run k6 test - workflow
-        run: npm run k6:run-workflow
-      
-      - name: Upload HTML workflow report
-        uses: actions/upload-artifact@v4
-        with:
-          name: k6-html-report
-          path: cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html
 
+      # 🔹 k6 Workflow
+      - name: Run k6 test - workflow
+        id: k6_workflow
+        continue-on-error: true
+        run: VERSION=${VERSION} npm run k6:run-workflow
+
+      # 🔹 k6 Endpoints
       - name: Run k6 test - endpoints
-        run: npm run k6:run-endpoints
-          
-      - name: Upload HTML endpoint report
+        id: k6_endpoints
+        continue-on-error: true
+        run: VERSION=${VERSION} npm run k6:run-endpoints
+
+      # 🔹 Organize reports
+      - name: Rename reports
+        run: |
+          mkdir -p reports/${VERSION}
+
+          mv cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html \
+             reports/${VERSION}/k6-workflow-${VERSION}.html || true
+
+          mv cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html \
+             reports/${VERSION}/k6-endpoints-${VERSION}.html || true
+
+      # 🔹 Upload reports
+      - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
-          name: k6-html-report
-          path: cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html
+          name: qa-reports-${{ env.VERSION }}
+          path: reports/${{ env.VERSION }}
+
+      # 🔥 Final Quality Gate (optional but powerful)
+      - name: Final Status Check
+        if: always()
+        run: |
+          echo "Cypress result: ${{ steps.cypress.outcome }}"
+          echo "Postman result: ${{ steps.postman.outcome }}"
+          echo "k6 workflow result: ${{ steps.k6_workflow.outcome }}"
+          echo "k6 endpoints result: ${{ steps.k6_endpoints.outcome }}"
+
+          if [[ "${{ steps.cypress.outcome }}" == "failure" || \
+                "${{ steps.postman.outcome }}" == "failure" || \
+                "${{ steps.k6_workflow.outcome }}" == "failure" || \
+                "${{ steps.k6_endpoints.outcome }}" == "failure" ]]; then
+            echo "❌ One or more test stages failed"
+            exit 1
+          else
+            echo "✅ All tests passed"
+          fi
 
