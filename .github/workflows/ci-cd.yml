@@ -99,23 +99,31 @@ jobs:
         continue-on-error: true
         run: VERSION=${VERSION} npm run k6:run-endpoints
 
-      # Organize reports
-      - name: Rename reports
+
+      # Organize and gather all reports
+      - name: Rename k6 reports
         run: |
           mkdir -p cypress/e2e/performance-tests/k6/reports/${VERSION}
-
           mv cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html \
              cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-workflow-${VERSION}.html || true
-
           mv cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html \
              cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-endpoints-${VERSION}.html || true
 
-      # Upload reports
-      - name: Upload reports
+      - name: Gather all reports
+        run: |
+          mkdir -p cypress/reports/${VERSION}/cypress
+          mkdir -p cypress/reports/${VERSION}/postman
+          mkdir -p cypress/reports/${VERSION}/k6
+          cp -r cypress/reports/mochawesome/* cypress/reports/${VERSION}/cypress/ || true
+          cp -r cypress/reports/postman/* cypress/reports/${VERSION}/postman/ || true
+          cp -r cypress/e2e/performance-tests/k6/reports/${VERSION}/* cypress/reports/${VERSION}/k6/ || true
+
+      # Upload all reports
+      - name: Upload all reports
         uses: actions/upload-artifact@v4
         with:
           name: qa-reports-${{ env.VERSION }}
-          path: cypress/e2e/performance-tests/k6/reports/${{ env.VERSION }}
+          path: cypress/reports/${{ env.VERSION }}
 
       # Final check to determine overall workflow status
       - name: Final Status Check
