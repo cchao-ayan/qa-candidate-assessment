@@ -77,10 +77,8 @@ jobs:
         id: postman
         continue-on-error: true
           run: |
-            mkdir -p cypress/reports/postman
-            npx newman run cypress/e2e/api-tests/postman_collection.json \
-              -e cypress/e2e/api-tests/env.json \
-              -r htmlextra --reporter-htmlextra-export cypress/reports/postman/report.html
+            mkdir -p cypress/e2e/api-tests/reports
+            npm run postman:run
 
       # Setup k6
       - name: Setup k6
