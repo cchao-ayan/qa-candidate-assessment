@@ -81,6 +81,9 @@ jobs:
       # Setup k6
       - name: Setup k6
         uses: grafana/setup-k6-action@v1
+        
+      - name: Create k6 reports directory
+        run: mkdir -p cypress/e2e/performance-tests/k6/reports
 
       # k6 Workflow
       - name: Run k6 test - workflow
