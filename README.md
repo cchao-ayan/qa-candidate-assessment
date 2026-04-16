@@ -19,6 +19,9 @@ This project contains three types of automated tests:
 npm ci
 ```
 
+```
+npm install -D newman-reporter-htmlextra mochawesome mochawesome-merge mochawesome-report-generator
+```
 
 ### 2. Run Cypress Tests
 
@@ -35,8 +38,8 @@ npm ci
 ### 3. Run k6 Performance Tests
 
 There are modular k6 scripts in `cypress/e2e/performance-tests/k6/`:
-- Main test entry: `cypress/e2e/performance-tests/k6/tests.js`
-- Supporting scripts: `cypress/e2e/performance-tests/k6/scripts.js`
+- Main test entry: `cypress/e2e/performance-tests/k6/tests/`
+- Supporting scripts: `cypress/e2e/performance-tests/k6/`
 
 To run the main k6 test:
 ```
@@ -65,8 +68,13 @@ npm run postman:run
 - **k6 performance tests:** `cypress/e2e/performance-tests/k6/`
 - **Postman collection & environment:** `cypress/e2e/api-tests/`
 
+## Test Reports Locations
+- **Cypress UI report:** `cypress/e2e/reports/local/cypress/mochawesome/`
+- **Cypress UI screenshots:** `cypress/e2e/reports/local/cypress/screenshots/`
+- **Cypress UI videos:** `cypress/e2e/reports/local/cypress/videos/`
+- **k6 report:** `cypress/e2e/reports/local/cypress/k6/`
+- **Postman report:** `cypress/e2e/reports/local/cypress/postman/`
 
 ## Notes
 - All test scripts are defined in `package.json` under the `scripts` section.
-- Screenshots and test artifacts are saved in `cypress/screenshots/`.
 - For more options, refer to the documentation for [Cypress](https://docs.cypress.io/), [k6](https://k6.io/docs/), and [Newman](https://www.npmjs.com/package/newman).
