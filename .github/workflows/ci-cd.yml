@@ -72,16 +72,20 @@ jobs:
         run: |
           npx cypress run --reporter cypress-mochawesome-reporter
 
-       # Postman (non-blocking but visible failure)
+       # Run Postman Collection with HTML Extra reporter (non-blocking but visible failure)
       - name: Run Postman API tests
         id: postman
         continue-on-error: true
-        run: npm run postman:run
+          run: |
+            mkdir -p cypress/reports/postman
+            npx newman run cypress/e2e/api-tests/postman_collection.json \
+              -e cypress/e2e/api-tests/env.json \
+              -r htmlextra --reporter-htmlextra-export cypress/reports/postman/report.html
 
       # Setup k6
       - name: Setup k6
         uses: grafana/setup-k6-action@v1
-        
+
       - name: Create k6 reports directory
         run: mkdir -p cypress/e2e/performance-tests/k6/reports
 

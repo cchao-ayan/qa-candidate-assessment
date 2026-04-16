@@ -16,6 +16,6 @@
     "cy:open": "cypress open",
     "k6:run-workflow": "k6 run cypress/e2e/performance-tests/k6/tests/workflow.tests.js",
     "k6:run-endpoints": "k6 run cypress/e2e/performance-tests/k6/tests/endpoints.tests.js",
-    "postman:run": "npx newman run cypress/e2e/api-tests/postman_collection.json -e cypress/e2e/api-tests/env.json"
+    "postman:run": "npx newman run cypress/e2e/api-tests/postman_collection.json -e cypress/e2e/api-tests/env.json -r htmlextra --reporter-htmlextra-export cypress/e2e/api-tests/reports/postman-report.html"
   }
 }
