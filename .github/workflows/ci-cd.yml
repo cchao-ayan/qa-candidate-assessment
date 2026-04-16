@@ -101,14 +101,14 @@ jobs:
         run: VERSION=${VERSION} npm run k6:run-endpoints
 
 
-      # Organize and gather all reports
-      - name: Rename k6 reports
-        run: |
-          mkdir -p cypress/e2e/performance-tests/k6/reports/${VERSION}
-          mv cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html \
-             cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-workflow-${VERSION}.html || true
-          mv cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html \
-             cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-endpoints-${VERSION}.html || true
+      # # Organize and gather all reports
+      # - name: Rename k6 reports
+      #   run: |
+      #     mkdir -p cypress/e2e/performance-tests/k6/reports/${VERSION}
+      #     mv cypress/e2e/performance-tests/k6/reports/k6-workflow-summary.html \
+      #        cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-workflow-${VERSION}.html || true
+      #     mv cypress/e2e/performance-tests/k6/reports/k6-endpoints-summary.html \
+      #        cypress/e2e/performance-tests/k6/reports/${VERSION}/k6-endpoints-${VERSION}.html || true
 
       - name: Gather all reports
         run: |
@@ -117,7 +117,7 @@ jobs:
           mkdir -p cypress/e2e/reports/${VERSION}/k6
           cp -r cypress/e2e/ui-tests/reports/mochawesome/* cypress/e2e/reports/${VERSION}/cypress/ || true
           cp -r cypress/e2e/api-tests/reports/* cypress/e2e/reports/${VERSION}/postman/ || true
-          cp -r cypress/e2e/performance-tests/k6/reports/${VERSION}/* cypress/e2e/reports/${VERSION}/k6/ || true
+          cp -r cypress/e2e/performance-tests/k6/reports/* cypress/e2e/reports/${VERSION}/k6/ || true
 
       # Upload all reports
       - name: Upload all reports
