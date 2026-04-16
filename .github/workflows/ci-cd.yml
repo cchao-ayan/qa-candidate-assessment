@@ -70,8 +70,7 @@ jobs:
         id: cypress
         continue-on-error: true
         run: |
-          npx cypress run \
-            --cypress-mochawesome-reporter
+          npx cypress run --reporter cypress-mochawesome-reporter
 
        # Postman (non-blocking but visible failure)
       - name: Run Postman API tests
