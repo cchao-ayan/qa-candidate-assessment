@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 jobs:
-  QA_Pipeline:
+  qa_pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -70,7 +70,8 @@ jobs:
         id: cypress
         continue-on-error: true
         run: |
-          npx cypress run --reporter cypress-mochawesome-reporter
+          mkdir -p cypress/e2e/ui-tests/reports/mochawesome
+          VERSION=${VERSION} npm run cy:run
 
        # Run Postman Collection with HTML Extra reporter (non-blocking but visible failure)
       - name: Run Postman API tests
@@ -78,7 +79,7 @@ jobs:
         continue-on-error: true
         run: |
             mkdir -p cypress/e2e/api-tests/reports
-            npm run postman:run
+            VERSION=${VERSION} npm run postman:run
 
       # Setup k6
       - name: Setup k6
@@ -114,8 +115,8 @@ jobs:
           mkdir -p cypress/e2e/reports/${VERSION}/cypress
           mkdir -p cypress/e2e/reports/${VERSION}/postman
           mkdir -p cypress/e2e/reports/${VERSION}/k6
-          cp -r cypress/e2e/reports/mochawesome/* cypress/e2e/reports/${VERSION}/cypress/ || true
-          cp -r cypress/e2e/reports/postman/* cypress/e2e/reports/${VERSION}/postman/ || true
+          cp -r cypress/e2e/ui-tests/reports/mochawesome/* cypress/e2e/reports/${VERSION}/cypress/ || true
+          cp -r cypress/e2e/api-tests/reports/* cypress/e2e/reports/${VERSION}/postman/ || true
           cp -r cypress/e2e/performance-tests/k6/reports/${VERSION}/* cypress/e2e/reports/${VERSION}/k6/ || true
 
       # Upload all reports
