@@ -7,8 +7,8 @@ export function getProductID() {
     const url = `${baseUrl}/products`;
     const param = {
         tags: { name: 'Get products',
-            vu: `${__VU}`,
-            iterations: `${__ITER}`
+            // vu: `${__VU}`,
+            // iterations: `${__ITER}`
          }
     };
 

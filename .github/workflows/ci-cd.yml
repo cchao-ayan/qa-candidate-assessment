@@ -111,19 +111,19 @@ jobs:
 
       - name: Gather all reports
         run: |
-          mkdir -p cypress/reports/${VERSION}/cypress
-          mkdir -p cypress/reports/${VERSION}/postman
-          mkdir -p cypress/reports/${VERSION}/k6
-          cp -r cypress/reports/mochawesome/* cypress/reports/${VERSION}/cypress/ || true
-          cp -r cypress/reports/postman/* cypress/reports/${VERSION}/postman/ || true
-          cp -r cypress/e2e/performance-tests/k6/reports/${VERSION}/* cypress/reports/${VERSION}/k6/ || true
+          mkdir -p cypress/e2e/reports/${VERSION}/cypress
+          mkdir -p cypress/e2e/reports/${VERSION}/postman
+          mkdir -p cypress/e2e/reports/${VERSION}/k6
+          cp -r cypress/e2e/reports/mochawesome/* cypress/e2e/reports/${VERSION}/cypress/ || true
+          cp -r cypress/e2e/reports/postman/* cypress/e2e/reports/${VERSION}/postman/ || true
+          cp -r cypress/e2e/performance-tests/k6/reports/${VERSION}/* cypress/e2e/reports/${VERSION}/k6/ || true
 
       # Upload all reports
       - name: Upload all reports
         uses: actions/upload-artifact@v4
         with:
           name: qa-reports-${{ env.VERSION }}
-          path: cypress/reports/${{ env.VERSION }}
+          path: cypress/e2e/reports/${{ env.VERSION }}
 
       # Final check to determine overall workflow status
       - name: Final Status Check

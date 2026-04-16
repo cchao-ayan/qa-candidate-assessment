@@ -32,8 +32,8 @@ export function addItemToCart(cartId, productIdCallback) {
             "Content-Type": "application/json"
         },
         tags: { name: 'Add item to cart',
-            vu: `${__VU}`,
-            iterations: `${__ITER}`
+            // vu: `${__VU}`,
+            // iterations: `${__ITER}`
          }
     });
     check(response, {

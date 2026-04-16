@@ -15,8 +15,8 @@ export function createOrder(cartId, accessToken) {
             "Content-Type": "application/json",
         },
         tags: { name: 'Create order',
-            vu: `${__VU}`,
-            iterations: `${__ITER}`
+            // vu: `${__VU}`,
+            // iterations: `${__ITER}`
          }
     };
 

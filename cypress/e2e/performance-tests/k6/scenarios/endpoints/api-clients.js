@@ -18,8 +18,8 @@ export function createAPIClient() {
             "Content-Type": "application/json",
         },
         tags: { name: 'Create API client',
-           vu: `${__VU}`,
-            iterations: `${__ITER}`
+        //    vu: `${__VU}`,
+        //     iterations: `${__ITER}`
          }
     };
 
