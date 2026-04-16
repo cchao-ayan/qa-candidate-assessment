@@ -76,7 +76,7 @@ jobs:
       - name: Run Postman API tests
         id: postman
         continue-on-error: true
-          run: |
+        run: |
             mkdir -p cypress/e2e/api-tests/reports
             npm run postman:run
 
