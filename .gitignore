@@ -3,3 +3,5 @@ cypress/e2e/reports/mochawesome/
 cypress/e2e/reports/postman/
 cypress/e2e/performance-tests/k6/reports/
 cypress/e2e/reports/
+cypress/e2e/ui-tests/reports/screenshots/
+cypress/e2e/ui-tests/reports/videos/

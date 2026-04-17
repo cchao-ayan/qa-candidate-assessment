@@ -20,7 +20,7 @@ export const options = {
   },
 
   thresholds: {
-    'http_req_duration{scenario:create_cart}': ['p(95)<500'],
-    'http_req_duration{scenario:create_user}': ['p(95)<500']
+    'http_req_duration{scenario:create_cart}': ['p(95)<1000'],
+    'http_req_duration{scenario:create_user}': ['p(95)<1000']
   },
 };

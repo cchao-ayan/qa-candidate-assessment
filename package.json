@@ -9,7 +9,8 @@
     "mochawesome-merge": "^5.1.1",
     "mochawesome-report-generator": "^6.3.2",
     "newman-reporter-htmlextra": "^1.22.5",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "shx": "^0.4.0"
   },
   "scripts": {
     "cy:run": "cypress run --reporter cypress-mochawesome-reporter",
@@ -17,7 +18,8 @@
     "k6:run-workflow": "k6 run cypress/e2e/performance-tests/k6/tests/workflow.tests.js",
     "k6:run-endpoints": "k6 run cypress/e2e/performance-tests/k6/tests/endpoints.tests.js",
     "postman:run": "npx newman run cypress/e2e/api-tests/postman_collection.json -e cypress/e2e/api-tests/env.json -r htmlextra --reporter-htmlextra-export cypress/e2e/api-tests/reports/postman-report.html",
-    "gather:reports": "mkdir -p cypress/e2e/reports/local/cypress/mochawesome && mkdir -p cypress/e2e/reports/local/cypress/screenshots && mkdir -p cypress/e2e/reports/local/cypress/videos && mkdir -p cypress/e2e/reports/local/postman && mkdir -p cypress/e2e/reports/local/k6 && cp -r cypress/e2e/ui-tests/reports/mochawesome/* cypress/e2e/reports/local/cypress/mochawesome/ || true && cp -r cypress/e2e/ui-tests/reports/screenshots/* cypress/e2e/reports/local/cypress/screenshots/ || true && cp -r cypress/e2e/ui-tests/reports/videos/* cypress/e2e/reports/local/cypress/videos/ || true && cp -r cypress/e2e/api-tests/reports/* cypress/e2e/reports/local/postman/ || true && cp -r cypress/e2e/performance-tests/k6/reports/* cypress/e2e/reports/local/k6/ || true",
-    "test:all": "npm run cy:run && npm run k6:run-workflow && npm run k6:run-endpoints && npm run postman:run && npm run gather:reports"
+    "dir:reports": "shx mkdir -p cypress/e2e/ui-tests/reports/mochawesome cypress/e2e/ui-tests/reports/screenshots cypress/e2e/ui-tests/reports/videos cypress/e2e/api-tests/reports cypress/e2e/performance-tests/k6/reports cypress/e2e/reports/local/cypress/mochawesome cypress/e2e/reports/local/cypress/screenshots cypress/e2e/reports/local/cypress/videos cypress/e2e/reports/local/postman cypress/e2e/reports/local/k6",
+    "gather:reports": "shx cp -r cypress/e2e/ui-tests/reports/mochawesome/. cypress/e2e/reports/local/cypress/mochawesome/ && shx cp -r cypress/e2e/ui-tests/reports/screenshots/. cypress/e2e/reports/local/cypress/screenshots/ && shx cp -r cypress/e2e/ui-tests/reports/videos/. cypress/e2e/reports/local/cypress/videos/ && shx cp -r cypress/e2e/api-tests/reports/. cypress/e2e/reports/local/postman/ && shx cp -r cypress/e2e/performance-tests/k6/reports/. cypress/e2e/reports/local/k6/",
+    "test:all": "npm run cy:run && npm run k6:run-workflow && npm run k6:run-endpoints && npm run postman:run && npm run dir:reports && npm run gather:reports"
   }
 }
